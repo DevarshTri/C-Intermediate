@@ -1,0 +1,611 @@
+------------ Exception Handling ----------------------
+//Console.WriteLine("Enter First Number : ");
+//int num1 = int.Parse(Console.ReadLine());
+
+//Console.WriteLine("Enter Second Number : ");
+//int num2 = int.Parse(Console.ReadLine());
+//try
+//{
+//    int result = num1 / num2;
+//    Console.WriteLine("Result :" + result);
+//}
+//catch(DivideByZeroException ex) 
+//{
+//    Console.WriteLine("Number is not divided by zero");
+//    Console.WriteLine(ex.Message);
+//}
+
+//Console.WriteLine("Remaining statements");
+//Console.WriteLine("Remaining statements");
+//Console.WriteLine("Remaining statements");
+
+// index exception
+//int[] arr = new int[3];
+//try
+//{
+//    arr[0] = 1;
+//    arr[1] = 2;
+//    arr[2] = 3;
+//    arr[3] = 4;
+
+//    foreach (var item in arr)
+//    {
+//        Console.WriteLine(item);
+//    }
+//}
+//catch (IndexOutOfRangeException ex)
+//{
+//    Console.WriteLine(ex.Message);
+//}
+
+//Null Exception
+//try
+//{
+//    string name = null;
+//    Console.WriteLine(name.Length);
+//}
+//catch (NullReferenceException ex)  
+//{
+//    Console.WriteLine(ex.Message);
+//}
+
+//Format Exception
+
+//Console.WriteLine("Enter Number : ");
+//string number = Console.ReadLine();
+//try
+//{
+//    int num = int.Parse(number);
+//    Console.WriteLine("Number is : " + num);
+//}
+//catch (FormatException ex)
+//{
+//    Console.WriteLine(ex.Message);
+//}
+
+//throw keyword
+//Console.WriteLine("Enter Your Age");
+//int age = int.Parse(Console.ReadLine());
+//try
+//{
+//    if (age >= 18)
+//    {
+//        Console.WriteLine("You are eligible to vote");
+//    }
+//    else
+//    {
+//        throw new Exception("You are not eligible to vote");
+//    }
+//}
+//catch (Exception ex)
+//{
+//    Console.WriteLine(ex.Message);
+//}
+
+int acc_balance = 5000;
+int withdrawal_amount = 30000;
+try
+{
+    if (acc_balance < withdrawal_amount)
+    {
+        throw new Exception("Insufficient Balance");
+    }
+    else
+    {
+        acc_balance = acc_balance - withdrawal_amount;
+        Console.WriteLine($"{acc_balance}");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message );
+}
+
+-------------------------- Delegates -----------------------------------
+ public delegate void Details(string name);
+ internal class Program
+ {
+     public void PrintYourName(string name) 
+     {
+         Console.WriteLine("Your name is: "+name);
+     }
+     static void Main(string[] args)
+     {
+         Console.WriteLine("Enter Your Name:");
+         string name = Console.ReadLine();
+         
+         Program p = new Program();
+         Details details = new Details(p.PrintYourName);
+         details.Invoke(name);
+         details(name);
+         Console.ReadLine();
+     }
+ }
+
+public delegate void Calc(int a , int b);
+internal class Program
+{
+    public void Addition(int a , int b)
+    {
+        int result = a + b;
+        Console.WriteLine("Result is:" + result);
+    }
+    public void Substraction(int a, int b)
+    {
+        int result = a - b;
+        Console.WriteLine("Result is:" + result);
+    }
+    public void Multiplication(int a, int b)
+    {
+        int result = a * b;
+        Console.WriteLine("Result is:" + result);
+    }
+    public void Division(int a, int b)
+    {
+        int result = a / b;
+        Console.WriteLine("Result is:" + result);
+    }
+    static void Main(string[] args)
+    {
+        Program p = new Program();
+        Calc obj = new Calc(p.Addition);
+        obj.Invoke(50, 50);
+        obj = p.Substraction;
+        obj(50, 10);
+        obj = p.Multiplication;
+        obj.Invoke(50, 90);
+        obj = p.Division;
+        obj(50, 10);
+        Console.ReadLine();
+    }
+}
+--------------------------- Single Cast Delegates ------------------------------------
+ public delegate void Calc(int n1 , int n2);
+  public class Program
+  {
+      public static void Addition(int a, int b)
+      {
+          int c = a + b;
+          Console.WriteLine(c);
+      }
+      static void Main(string[] args)
+      {
+          Calc calc = new Calc(Addition);
+          calc.Invoke(55, 96);
+          Console.ReadLine();
+      }
+  }
+-------------------------------- Multiple Delegates --------------------------------
+public delegate void Calc(int a, int b);
+public delegate void show_d();
+public delegate void Calc2(int num);
+public class Program
+{
+    public static void Square(int num)
+    {
+        int square = num * num;
+        Console.WriteLine(square);
+    }
+    public static void Cube(int num)
+    {
+        int cube = num * num * num;
+        Console.WriteLine(cube);
+    }
+    public static void Show()
+    {
+        Console.WriteLine("This is show method");
+    }
+    public void Addition(int a, int b)
+    {
+        int result = a + b;
+        Console.WriteLine("Result is:" + result);
+    }
+    public void Substraction(int a, int b)
+    {
+        int result = a - b;
+        Console.WriteLine("Result is:" + result);
+    }
+    public void Multiplication(int a, int b)
+    {
+        int result = a * b;
+        Console.WriteLine("Result is:" + result);
+    }
+    public void Division(int a, int b)
+    {
+        int result = a / b;
+        Console.WriteLine("Result is:" + result);
+    }
+    static void Main(string[] args)
+    {
+        //show_d sd = new show_d(Show);
+        //sd.Invoke();
+        Calc2 calc2 = new Calc2(Square);
+        calc2.Invoke(55);
+        calc2 = Cube;
+        calc2.Invoke(55);
+        Console.ReadLine();
+    }
+}
+-------------------------------- Multicast Delegates --------------------------------
+ public delegate void Calc(int a, int b);
+ public delegate void show_d();
+ public delegate void Calc2(int num);
+ public class Program
+ {
+     public static void Square(int num)
+     {
+         int square = num * num;
+         Console.WriteLine(square);
+     }
+     public static void Cube(int num)
+     {
+         int cube = num * num * num;
+         Console.WriteLine(cube);
+     }
+     public static void Show()
+     {
+         Console.WriteLine("This is show method");
+     }
+     public void Addition(int a, int b)
+     {
+         int result = a + b;
+         Console.WriteLine("Result is:" + result);
+     }
+     public void Substraction(int a, int b)
+     {
+         int result = a - b;
+         Console.WriteLine("Result is:" + result);
+     }
+     public void Multiplication(int a, int b)
+     {
+         int result = a * b;
+         Console.WriteLine("Result is:" + result);
+     }
+     public void Division(int a, int b)
+     {
+         int result = a / b;
+         Console.WriteLine("Result is:" + result);
+     }
+     static void Main(string[] args)
+     {
+         Program program = new Program();
+         //show_d sd = new show_d(Show);
+         //sd.Invoke();
+         //Calc2 calc2 = new Calc2(Square);
+         //calc2.Invoke(55);
+         //calc2 = Cube;
+         //calc2.Invoke(55);
+
+         Calc calc = new Calc(program.Addition);
+         calc += program.Substraction;
+         calc += program.Multiplication;
+         calc -= program.Division;
+         calc.Invoke(55, 55);
+         Console.ReadLine();
+     }
+ }
+
+
+------------------- ADD Or REMOVE Accessor in event ------------------------------
+using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+
+namespace ConsoleApp1
+{
+    public delegate void WorkPerformHandler(int hours , WorkType workType);
+    class Program
+    {
+        private WorkPerformHandler _workPerformHandler;
+
+        public event WorkPerformHandler WorkPerformed
+        {
+            add
+            {
+                _workPerformHandler = (WorkPerformHandler)Delegate.Combine(_workPerformHandler , value);
+            }
+            remove
+            {
+                //[MethodImpl(MethodImplOptions.Synchronized)]
+                _workPerformHandler = (WorkPerformHandler)Delegate.Remove(_workPerformHandler, value);
+            }
+        }
+        static void Main(string[] args)
+        {
+
+        }
+    }
+            
+        }
+
+------------------ event --------------------
+using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
+
+namespace ConsoleApp1
+{
+    public class WorkPerformedEventArgs : EventArgs
+    {
+        public int hours { get; set; }
+        public WorkType WorkType { get; set; }
+    }
+    public delegate void WorkPerformedHandler(object sender , WorkPerformedEventArgs e);
+    class Program
+    {
+        public event EventHandler<WorkPerformedEventArgs> WorkPerformed;
+
+        public event EventHandler WorkCompleted;
+
+        public void DoWork(int hours, WorkType workType)
+        {
+            for(int i = 0; i < hours; i++)
+            {
+                OnWorkPerformed(i+1, workType);
+                Thread.Sleep(3000);
+            }
+
+            OnWorkCompleted();
+            //OnWorkPerformed(hours, workType);
+            //if(WorkPerformed is WorkPerformedHandler del2)
+            //{
+            //    del2.Invoke(hours, workType);
+            //}
+            //WorkPerformedHandler del1 = WorkPerformed;
+           /// if(del1 != null)
+           // {
+            //    del1.Invoke(8, WorkType.Golf);
+           // }
+           // WorkPerformed?.Invoke(8, WorkType.GenerateReports);
+        }
+
+        protected virtual void OnWorkPerformed(int hours, WorkType workType)
+        {
+            if(WorkPerformed != null)
+            {
+                WorkPerformedEventArgs e = new WorkPerformedEventArgs()
+                {
+                    hours = hours,
+                    WorkType = workType
+                };
+                WorkPerformed(this, e); 
+            }
+        }
+        protected virtual void OnWorkCompleted()
+        {
+           if(WorkCompleted is EventHandler del3)
+            {
+                del3 (this, EventArgs.Empty);
+            }
+        }
+        static void Main(string[] args)
+        {
+           Program p = new Program();
+            p.WorkPerformed += new EventHandler<WorkPerformedEventArgs>(Work_Performed);
+            p.WorkCompleted += new EventHandler(Work_Completed);
+
+            p.DoWork(4, WorkType.GenerateReports);
+            Console.ReadLine();
+        }
+        static void Work_Performed(object sender, WorkPerformedEventArgs e)
+        {
+            Console.WriteLine($"{ e.hours} completed" );
+        }
+        static void Work_Completed(object sender,EventArgs e)
+        {
+            Console.WriteLine($" completed");
+        }
+    }
+    public enum WorkType
+    {
+        Golf,
+        GoToMeetings,
+        GenerateReports,
+    }
+            
+}
+
+using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
+
+namespace ConsoleApp1
+{
+   public delegate void WorkPerformedHandler(int hours , WorkType workType);
+    class Program
+    {
+        public event WorkPerformedHandler WorkPerformed;
+
+        public Program()
+        {
+            this.WorkPerformed += new WorkPerformedHandler(this.DoWork);
+        }
+        public void DoWork(int hours ,WorkType workType)
+        {
+            for (int i = 0; i < hours; i++)
+            {
+                
+                Console.WriteLine("Completed");
+                Thread.Sleep(1500);
+            }
+        }
+
+        
+        static void Main(string[] args)
+        {
+            Program p = new Program();
+            p.WorkPerformed(8, WorkType.GenerateReports);
+            Console.ReadLine();
+        }
+       
+    }
+    public enum WorkType
+    {
+        Golf, 
+        GoToEvents,
+        GenerateReports,
+    }
+}
+
+------------------- custom event Args ----------------------------------
+using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
+
+namespace ConsoleApp1
+{
+   
+    public class WorkPerformEventArgs
+    {
+        public int hours { get; set; }
+        public WorkType workType { get; set; }
+    }
+    public delegate void WorkPerformedHandler(object sender, WorkPerformEventArgs e);
+    public delegate void WorkCompletedHandler();
+    class Program
+    {
+        public event EventHandler<WorkPerformEventArgs> WorkPerformed;
+        public event WorkCompletedHandler WorkCompleted;
+
+
+        public void DoWork(int hours, WorkType workType)
+        {
+            for (int i = 0; i < hours; i++)
+            {
+                OnWorkPerformed(i + 1, workType);
+                Thread.Sleep(1500);
+            }
+            OnWorkCompleted();
+        }
+
+        protected virtual void OnWorkPerformed(int hours, WorkType workType)
+        {
+            if(WorkPerformed != null)
+            {
+                WorkPerformEventArgs e = new WorkPerformEventArgs()
+                {
+                    hours = hours,
+                    workType = workType
+                };
+                WorkPerformed(this, e);
+            }
+        }
+
+        protected virtual void OnWorkCompleted()
+        {
+            WorkCompleted?.Invoke();
+        }
+
+        static void Main(string[] args)
+        {
+            Program p = new Program();
+
+            p.WorkPerformed += new EventHandler<WorkPerformEventArgs>(Worker_Perform);
+            p.WorkCompleted += Worker_workComplete;
+
+            p.DoWork(5, WorkType.GenerateReports);
+            Console.ReadLine();
+        }
+
+        static void Worker_Perform(object sender , WorkPerformEventArgs e)
+        {
+            Console.WriteLine($"Performed {e.hours} hour(S) of work : {e.workType}");
+        }
+
+        static void Worker_workComplete()
+        {
+            Console.WriteLine("Work Complete");
+        }
+       
+    }
+    public enum WorkType
+    {
+        Golf,
+        GoToEvents,
+        GenerateReports,
+    }
+}
+
+------------------ student Event ---------------------------------
+using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
+
+namespace ConsoleApp1
+{
+    public class StudentArgs
+    {
+        public string Name { get; set; }
+        public int Grade { get; set; }
+    }
+    public delegate void ExamPass(object sender , StudentArgs s);
+    public class Student
+    {
+        public event EventHandler<StudentArgs> Ep;
+        public void PassExam(string Name, int Grade)
+        {
+            OnExamPassed(Name, Grade);
+        }
+
+        protected virtual void OnExamPassed(string Name, int Grade)
+        {
+            if(Ep != null)
+            {
+                StudentArgs args = new StudentArgs()
+                {
+                    Name = Name,
+                    Grade = Grade
+                };
+                Ep(this, args);
+            }
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Student student = new Student();
+
+            student.Ep += ExamPassed;
+
+            student.PassExam("Devarsh", 89);
+            Console.ReadLine();
+        }
+        static void ExamPassed(object sender , StudentArgs s)
+        {
+            if (s.Grade > 50)
+            {
+                Console.WriteLine($" Congratulations {s.Name} for this {s.Grade} Marks");
+            }
+            else
+            {
+                Console.WriteLine($"Sorry {s.Name} for this {s.Grade} Marks");
+            }
+        }
+    }
+}
+

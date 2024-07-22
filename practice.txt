@@ -1,0 +1,980 @@
+Delegate Practice:
+
+1. public delegate string StringOperation(string value);
+ public class Program
+ {
+     public string ToUpper(string value)
+     {
+         return value;
+     }
+     public string ToLower(string value)
+     {
+         return value;
+     }
+     static void Main()
+     {
+         Program p  = new Program();
+         StringOperation so = new StringOperation(p.ToLower);
+         so += p.ToUpper;
+         Console.WriteLine(so("Devarsh"));
+         Console.ReadLine();
+     }
+ }
+
+2.public delegate void NumberOperation(int n);
+public class Program
+{
+    public void PrintSquare(int n)
+    {
+        int c = n * n;
+        Console.WriteLine(c);
+    }
+    public void PrintCube(int n)
+    {
+        int c = n * n * n;
+        Console.WriteLine(c);
+    }
+    static void Main()
+    {
+        Program p = new Program();
+        NumberOperation no = new NumberOperation(p.PrintSquare);
+        no += p.PrintCube;
+        no.Invoke(5);
+        Console.ReadLine();
+    }
+}
+
+3.public delegate int MathOperation(int x, int y);
+public class Program
+{
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+    public int Multiply(int a, int b)
+    {
+        return a * b;
+    }
+    public int PerformMathOperation(int a, int b, MathOperation mo)
+    {
+      return mo(a , b);
+    }
+    static void Main()
+    {
+        Program p = new Program();
+        Console.WriteLine(p.PerformMathOperation(20, 50, p.Add));
+        Console.WriteLine(p.PerformMathOperation(20, 50, p.Multiply)); 
+        Console.ReadLine();
+    }
+}
+
+4. public delegate void Greeting(string message);
+ public class Program
+ {
+     static void Main()
+     {
+         Greeting greeting = delegate (string message)
+         {
+             Console.WriteLine(message);
+         };
+         greeting.Invoke("Hiii How are you?");
+         Console.ReadLine();
+     }
+ }
+
+5. public delegate bool Comparison(int a , int b);
+ public class Program
+ {
+     static void Main()
+     {
+         Comparison c = (a, b) => a > b;
+         Console.WriteLine(c(5,4));
+         Console.ReadLine();
+     }
+ }
+
+6.public delegate T Operation<T>(T a , T b);
+public class Program
+{
+    public string Concate(string a, string b)
+    {
+        var c = a + b;
+        return c;
+       
+    }
+    public int Add(int a, int b)
+    {
+        int c = a + b;
+        return (int)c;
+    }
+    static void Main()
+    {
+        Program p = new Program();
+        Operation<string> op = new Operation<string>(p.Concate);
+        Console.WriteLine(op.Invoke("devarsh", "Trivedi"));
+
+        Operation<int> intop = new Operation<int>(p.Add);
+        Console.WriteLine(intop.Invoke(5,5));
+        Console.ReadLine();
+    }
+}
+
+7.using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text; 
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    public delegate void ThresoldReachedHandler(object sender, EventArgs e);
+
+    public class Counter
+    {
+        public event ThresoldReachedHandler ThresoldReached;
+
+        private int _count;
+        private int _thresold;
+
+        public Counter(int thresold)
+        {
+            _thresold = thresold;
+        }
+
+        public void Add(int x)
+        {
+            _count += x;
+            if (_count >= _thresold)
+            {
+                OnThresoldReached(EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnThresoldReached(EventArgs e)
+        {
+            ThresoldReached?.Invoke(this, e);
+        }
+    }
+    public class Program
+    {
+        static void Main()
+        {
+            Counter counter = new Counter(8);
+            counter.ThresoldReached += Counter_ThresoldReached;
+
+            counter.Add(7);
+            counter.Add(6);
+            counter.Add(5);
+            Console.ReadLine();
+        }
+
+        private static void Counter_ThresoldReached(object sender, EventArgs e)
+        {
+            Console.WriteLine("Thresold reached");
+        }
+    }
+}
+
+8. public delegate int AithmaticOperation(int a , int b);
+ public class Program
+ {
+     public int Addition(int a, int b)
+     {
+         int c = a + b;
+         return c;
+     }
+     public int Substraction(int a, int b)
+     {
+         int c = a - b;
+         return c;
+     }
+     public int Multiplication(int a, int b)
+     {
+         int c =  a * b;
+         return c;
+     }
+     public int Division(int a, int b)
+     {
+         int c = (a / b);
+         return c;
+     }
+     static void Main()
+     {
+         Program p = new Program();
+         AithmaticOperation ao = new AithmaticOperation(p.Addition);
+         ao += p.Substraction;
+         ao += p.Multiplication;
+         ao += p.Division;
+
+         foreach (AithmaticOperation operation in ao.GetInvocationList())
+         {
+             int result = operation.Invoke(55, 5);
+             Console.WriteLine(result);
+         }
+        
+         Console.ReadLine();
+     }
+ }
+
+9. public delegate string StringOperation(string value);
+ public class Program
+ {
+     public string ToUpper(string str)
+     {
+         return str.ToUpper();
+     }
+     public string ToLower(string str)
+     {
+         return str.ToLower();
+     }
+     public string ReverseString(string str)
+     {
+         //string r = "";
+         //for(int i = str.Length - 1; i >= 0; i--)
+         //{
+         //    r += str[i];
+         //}
+         //return r;
+         char[] chars = str.ToCharArray();
+         Array.Reverse(chars);
+         return new string(chars);
+     }
+
+     public string PerformOperation(StringOperation operation , string str)
+     {
+         return operation(str);
+     }
+     static void Main()
+     {
+         Program p = new Program();
+
+         StringOperation so = new StringOperation(p.ToUpper);
+         string result = p.PerformOperation(so, "devarsh");
+         Console.WriteLine(result);
+         //StringOperation so = new StringOperation(p.ToLower);
+         //so += p.ToUpper;
+         //so += p.ReverseString;
+
+         //foreach (StringOperation operation in so.GetInvocationList())
+         //{
+         //    string result = operation.Invoke("DEVARSh");
+         //    Console.WriteLine(result);
+         //}
+         Console.ReadLine();
+     }
+ }
+
+10.using System.Collections.Generic;
+using System;
+using System.Linq;
+
+public delegate bool FilterPredicate(int number);
+public delegate int Comparison(int a, int b);
+
+public class NumberProcessor
+{
+    public List<int> FilterNumbers(List<int> numbers, FilterPredicate filter)
+    {
+        return numbers.Where(number => filter(number)).ToList();
+    }
+
+    public void SortNumbers(List<int> numbers, Comparison comparison)
+    {
+        numbers.Sort((a, b) => comparison(a, b));
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        NumberProcessor processor = new NumberProcessor();
+
+        // Filter even numbers
+        List<int> evenNumbers = processor.FilterNumbers(numbers, x => x % 2 == 0);
+        Console.WriteLine("Even numbers:");
+        foreach (var number in evenNumbers)
+        {
+            Console.Write($"{number} ");
+        }
+        Console.WriteLine();
+
+        // Filter odd numbers
+        List<int> oddNumbers = processor.FilterNumbers(numbers, x => x % 2 != 0);
+        Console.WriteLine("Odd numbers:");
+        foreach (var number in oddNumbers)
+        {
+            Console.Write($"{number} ");
+        }
+        Console.WriteLine();
+
+        // Sort in ascending order
+        processor.SortNumbers(numbers, (a, b) => a.CompareTo(b));
+        Console.WriteLine("Sorted in ascending order:");
+        foreach (var number in numbers)
+        {
+            Console.Write($"{number} ");
+        }
+        Console.WriteLine();
+
+        // Sort in descending order
+        processor.SortNumbers(numbers, (a, b) => b.CompareTo(a));
+        Console.WriteLine("Sorted in descending order:");
+        foreach (var number in numbers)
+        {
+            Console.Write($"{number} ");
+        }
+        Console.WriteLine();
+        Console.ReadLine();
+    }
+}
+
+11.Combine Practice
+
+---------- Class Library -----------------
+namespace ClassLibrary1
+{
+    public delegate T MathOperation<T>(T a, T b);
+
+    public class MathOperations<T> where T : struct, IComparable, IFormattable, IConvertible
+    {
+        public T Add(T a, T b)
+        {
+            try
+            {
+                return (dynamic)a + b;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Error in Add operation", e);
+            }
+        }
+
+        public T Subtract(T a, T b)
+        {
+            try
+            {
+                return (dynamic)a - b;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Error in Subtract operation", e);
+            }
+        }
+
+        public T Multiply(T a, T b)
+        {
+            try
+            {
+                return (dynamic)a * b;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Error in Multiply operation", e);
+            }
+        }
+
+        public T Divide(T a, T b)
+        {
+            try
+            {
+                if (b.Equals(default(T))) ;
+                return (dynamic)a / b;
+            }
+            catch (DivideByZeroException e)
+            {
+                throw new DivideByZeroException("Divide By Zero", e);
+            }
+            catch(InvalidOperationException  ex)
+            {
+                throw new InvalidOperationException("Error in Divide operation", ex);
+            }
+        }
+    }
+}
+
+------ Class --------
+using System;
+using ClassLibrary1;
+
+class Program
+{
+    static void Main()
+    {
+        MathOperations<int> mathOperations = new MathOperations<int>();
+
+        MathOperation<int> Addition = mathOperations.Add;
+        MathOperation<int> Substarction = mathOperations.Subtract;
+        MathOperation<int> Multiplication = mathOperations.Multiply;
+        MathOperation<int> Division = mathOperations.Divide;
+
+        try
+        {
+            Console.WriteLine($"Addition : {Addition.Invoke(55,55)}");
+            Console.WriteLine($"Substraction : {Substarction.Invoke(55, 55)}");
+            Console.WriteLine($"Multiplication : {Multiplication.Invoke(55, 55)}");
+            Console.WriteLine($"Division : {Division.Invoke(0, 0)}");
+        }
+        catch ( Exception ex )
+        {
+            Console.WriteLine(ex.Message);
+        }
+     }
+}
+
+12.
+------- Class ------
+using System;
+using System.Security.Cryptography.X509Certificates;
+using ClassLibrary1;
+
+class Program
+{
+    static void Main()
+    {
+        var intPublisher = new EventPublisher<int>();
+        var stringpublisher = new EventPublisher<string>();
+
+        intPublisher.Subscribe(OnIntEvent);
+        stringpublisher.Subscribe(OnStringEvent);
+
+        intPublisher.RaiseEvent(null, 42);
+        stringpublisher.RaiseEvent(null, "Devarsh");
+
+        intPublisher.Unsubscribe(OnIntEvent);
+        stringpublisher.Unsubscribe(OnStringEvent);
+
+        intPublisher.RaiseEvent(null, 84);
+        stringpublisher.RaiseEvent(null, "Good Bye Devarsh");
+
+
+    }
+    static void OnIntEvent(object sender, int evenyArgs)
+    {
+        Console.WriteLine($"Int event received with value : {evenyArgs}");
+    }
+
+    static void OnStringEvent(object sender, string eventArgs)
+    {
+        Console.WriteLine($"String event received with value :{eventArgs}");
+    }
+}
+
+-------- class Library-----
+// EventHandlersLibrary/EventHandlers.cs
+using System;
+using System.Collections.Generic;
+
+namespace ClassLibrary1
+{
+    public delegate void EventHandler<T>(object sender, T eventArgs);
+
+    public class EventPublisher<T>
+    {
+        private event EventHandler<T> _event;
+
+        public void Subscribe(EventHandler<T> eventHandler)
+        {
+            _event += eventHandler;
+        }
+
+        public void Unsubscribe(EventHandler<T> eventHandler)
+        {
+            _event -= eventHandler;
+        }
+
+        public void RaiseEvent(object sender, T eventArgs)
+        {
+            _event?.Invoke(sender, eventArgs);
+        }
+    }
+}
+
+13.------Library----
+// EventHandlersLibrary/EventHandlers.cs
+using System;
+using System.Collections.Generic;
+
+namespace ClassLibrary1
+{
+    public delegate void DataHandler<T>(T data);
+
+    public class DataProcessor<T>
+    {
+        public void ProcessData(T data, DataHandler<T> handler)
+        {
+            try
+            {
+                handler(data);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Error in data processing", e);
+            }
+        }
+    }
+}
+------- Class ------
+using System;
+using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using ClassLibrary1;
+
+class Program
+{
+    static void Main()
+    {
+        DataProcessor<string> p = new DataProcessor<string>();
+
+        DataHandler<string> handler = ProcessStringData;
+
+        try
+        {
+            p.ProcessData("Test Data", handler);
+            p.ProcessData(null, handler);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    static void ProcessStringData(string data)
+    {
+        if(data == null)
+        
+            throw new ArgumentNullException(nameof(data),"Data cannot be null");
+            Console.WriteLine($"Processing Data : {data}");
+        
+    }
+}
+
+14. -------- class --------
+using System;
+using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using ClassLibrary1;
+
+class Program
+{
+    static void Main()
+    {
+        Storage<string> storage = new Storage<string>();
+
+        try
+        {
+            storage.Additem("Item 1");
+            storage.Additem("Item 2");
+            storage.Additem(null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        try
+        {
+            Console.WriteLine(storage.GetItem(0));
+            Console.WriteLine(storage.GetItem(5));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+  
+        }
+    }
+
+using System;
+using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using ClassLibrary1;
+
+class Program
+{
+    static void Main()
+    {
+        Storage<string> storage = new Storage<string>();
+
+        try
+        {
+            storage.Additem("Item 1");
+            storage.Additem("Item 2");
+            storage.Additem(null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        try
+        {
+            Console.WriteLine(storage.GetItem(0));
+            Console.WriteLine(storage.GetItem(5));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+  
+        }
+    }
+
+---------- class Library --
+// EventHandlersLibrary/EventHandlers.cs
+using System;
+using System.Collections.Generic;
+
+namespace ClassLibrary1
+{
+    public class Storage<T>
+    {
+        private List<T> _items;
+
+        public Storage()
+        {
+            _items = new List<T>();
+        }
+
+        public void Additem(T item)
+        {
+            try
+            {
+                _items.Add(item);
+            }
+            catch(Exception ex)
+            {
+                throw new InvalidOperationException("Error adding item to storage", ex);
+            }
+        }
+
+        public T GetItem(int index)
+        {
+            try
+            {
+                return _items[index];
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), "Index Out of Range");
+            }
+            catch(Exception ex)
+            {
+                throw new InvalidOperationException("Error retrieving item from storage", ex);
+            }
+        }
+
+}
+}
+
+15.using System.Collections.Generic;
+using System;
+using System.Linq;
+using System.Threading;
+
+namespace ConsoleApp1 {
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("Enter First Number :");
+                    int num1 = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Enter Second Number :");
+                    int num2 = int.Parse(Console.ReadLine());
+
+                    int c = num1 / num2;
+
+                    Console.WriteLine("Division is :" + c);
+                    break;
+                }
+                catch (DivideByZeroException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch(FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (OverflowException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
+16.using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+
+namespace ConsoleApp1 {
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("Enter File Path");
+                    string filepath = Console.ReadLine();
+
+                    string fileContents = File.ReadAllText(filepath);
+                    Console.WriteLine("File Contents");
+                    Console.WriteLine(fileContents);
+                }
+                catch (FileNotFoundException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
+
+17.using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+
+namespace ConsoleApp1 {
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("Enter Comma-seperated Numbers :");
+                    string input = Console.ReadLine();
+
+                    int[] numbers = input.Split(',').Select(int.Parse).ToArray();
+                    int sum = numbers.Sum();
+                    Console.WriteLine(sum);
+                    break;
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (OverflowException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (Exception ex) 
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
+
+18.using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+
+namespace ConsoleApp1 {
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("Enter temprature in Farenhit : ");
+                    double f = double.Parse(Console.ReadLine());
+
+                    double celsius = (f - 32) * 5 / 9;
+                    Console.WriteLine($"Celsisus : {celsius}");
+                    break;
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (OverflowException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
+
+19.using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Linq.Expressions;
+
+namespace ConsoleApp1
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try { 
+            Console.WriteLine("Enter Initial Balance : ");
+            double initila = double.Parse(Console.ReadLine());
+
+            BankAccount BA = new BankAccount(initila);
+            Console.WriteLine($"Current Balance : {BA.Balance}");
+
+                while (true)
+                {
+                    try
+                    {
+                        Console.WriteLine("Enter Deposit Amout");
+                        double d = double.Parse(Console.ReadLine());
+
+                        BA.Deposit(d);
+                        Console.WriteLine($"Successfull :{d} - {BA.Balance}");
+                    }
+                    catch (NegativeAmount ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
+                    try
+                    {
+                        Console.WriteLine("Enter Withdraw Amount");
+                        double w = double.Parse(Console.ReadLine());
+
+                        BA.Withdraw(w);
+                        Console.WriteLine($"Successfull : {w} - {BA.Balance}");
+                    }
+                    catch (NegativeAmount ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    catch (InsufficientException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+                }
+               
+            }
+        }
+    
+
+    // Custom Exceptions
+    public class InsufficientException : Exception
+    {
+        public InsufficientException() :
+            base("Insufficient Funds in Account")
+        { }
+
+        public InsufficientException(string message)
+            : base(message) { }
+    }
+
+    public class  NegativeAmount : Exception
+    {
+        public NegativeAmount() : base("Amount cannot be Negative") { }
+
+        public NegativeAmount(string message) : base(message) { }
+    }
+
+    //Bank AccountClass
+    public class BankAccount
+    {
+        private double balance;
+
+        public double Balance
+        {
+            get { return balance; }
+            set
+            {
+                balance = value;
+            }
+        }
+
+        public BankAccount(double initialBalance)
+        {
+               if (initialBalance < 0)
+                {
+                    throw new NegativeAmount("Initial Balance cannot be Negative");
+                }
+            Balance = initialBalance;
+        }
+
+        public void Deposit(double amount)
+        {
+            if(amount < 0)
+            {
+                throw new NegativeAmount();
+            }
+            Balance += amount;
+        }
+
+        public void Withdraw (double amount)
+        {
+            if(amount < 0)
+            {
+                throw new NegativeAmount();
+            }
+
+            if(amount> balance)
+            {
+                throw new InsufficientException();
+            }
+
+            Balance -= amount;
+        }
+    }
+

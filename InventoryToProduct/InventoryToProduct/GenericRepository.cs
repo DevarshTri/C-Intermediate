@@ -69,9 +69,6 @@ namespace InventoryToProduct
         {
             Console.WriteLine("Product Updated");
         }
-        public void OnUpdate()
-        {
-
-        }
+        
     }
 }

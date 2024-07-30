@@ -10,7 +10,6 @@ namespace InventoryToCustomerApp
 {
     public class Program
     {
-        
         static void Main(string[] args)
         {
             var exist_id = 0;

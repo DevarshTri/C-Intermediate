@@ -19,7 +19,6 @@ namespace CustomerToOrderL
             this.OrderRemove += new OrderHandler(OnOrderRemove);
             this.OrderUpdate += new OrderHandler(OnOrderUpdate);
         }
-
         public List<T> orders = new List<T> ();
 
         public void Add(T order)

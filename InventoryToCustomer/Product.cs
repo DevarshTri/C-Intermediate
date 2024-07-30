@@ -10,7 +10,7 @@ namespace InventoryToCustomer
     {
         public int Product_Id   { get; set; }
         public string Product_Name { get; set; }
-        public double Product_Price     { get; set; }
+        public double Product_Price { get; set; }
         public int Product_Stock { get; set; }
 
         public Product(int product_Id, string product_Name, double product_Price, int product_Stock)
